@@ -12,17 +12,21 @@ import (
 
 // BotService is the main bot service
 type BotService struct {
-	Bot              *tgbotapi.BotAPI
-	Config           *config.Config
-	UserRepo         *repository.UserRepository
-	ComplaintRepo    *repository.ComplaintRepository
-	AdminRepo        *repository.AdminRepository
-	ClassRepo        *repository.ClassRepository
-	StateManager     *state.Manager
-	TelegramService  *TelegramService
-	UserService      *UserService
-	ComplaintService *ComplaintService
-	DocumentService  *DocumentService
+	Bot                  *tgbotapi.BotAPI
+	Config               *config.Config
+	UserRepo             *repository.UserRepository
+	ComplaintRepo        *repository.ComplaintRepository
+	ProposalRepo         *repository.ProposalRepository
+	AdminRepo            *repository.AdminRepository
+	ClassRepo            *repository.ClassRepository
+	AnnouncementRepo     *repository.AnnouncementRepository
+	StateManager         *state.Manager
+	TelegramService      *TelegramService
+	UserService          *UserService
+	ComplaintService     *ComplaintService
+	ProposalService      *ProposalService
+	DocumentService      *DocumentService
+	AnnouncementService  *AnnouncementService
 }
 
 // NewBotService creates a new bot service
@@ -36,8 +40,10 @@ func NewBotService(cfg *config.Config, db *sql.DB) (*BotService, error) {
 	// Initialize repositories
 	userRepo := repository.NewUserRepository(db)
 	complaintRepo := repository.NewComplaintRepository(db)
+	proposalRepo := repository.NewProposalRepository(db)
 	adminRepo := repository.NewAdminRepository(db)
 	classRepo := repository.NewClassRepository(db)
+	announcementRepo := repository.NewAnnouncementRepository(db)
 
 	// Initialize state manager
 	stateManager := state.NewManager(db)
@@ -46,20 +52,26 @@ func NewBotService(cfg *config.Config, db *sql.DB) (*BotService, error) {
 	telegramService := NewTelegramService(bot)
 	userService := NewUserService(userRepo)
 	complaintService := NewComplaintService(complaintRepo, userRepo)
+	proposalService := NewProposalService(proposalRepo, userRepo)
 	documentService := NewDocumentService("./temp_docs", bot) // temp directory for generated documents
+	announcementService := NewAnnouncementService(announcementRepo, adminRepo)
 
 	return &BotService{
-		Bot:              bot,
-		Config:           cfg,
-		UserRepo:         userRepo,
-		ComplaintRepo:    complaintRepo,
-		AdminRepo:        adminRepo,
-		ClassRepo:        classRepo,
-		StateManager:     stateManager,
-		TelegramService:  telegramService,
-		UserService:      userService,
-		ComplaintService: complaintService,
-		DocumentService:  documentService,
+		Bot:                 bot,
+		Config:              cfg,
+		UserRepo:            userRepo,
+		ComplaintRepo:       complaintRepo,
+		ProposalRepo:        proposalRepo,
+		AdminRepo:           adminRepo,
+		ClassRepo:           classRepo,
+		AnnouncementRepo:    announcementRepo,
+		StateManager:        stateManager,
+		TelegramService:     telegramService,
+		UserService:         userService,
+		ComplaintService:    complaintService,
+		ProposalService:     proposalService,
+		DocumentService:     documentService,
+		AnnouncementService: announcementService,
 	}, nil
 }
 

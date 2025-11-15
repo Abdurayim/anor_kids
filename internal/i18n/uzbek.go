@@ -49,6 +49,24 @@ var uzbek = map[string]string{
 
 	MsgComplaintCancelled: "❌ Shikoyat bekor qilindi.",
 
+	// Proposal flow
+	MsgSubmitProposal: "/proposal - Taklif yuborish",
+	MsgMyProposals:    "/my_proposals - Mening takliflarim",
+
+	MsgRequestProposal: "💡 Iltimos, taklifingizni yozib yuboring.\n\n" +
+		"Taklif matni kamida 10 ta belgidan iborat bo'lishi kerak.\n\n" +
+		"Aniq va tushunarli yozing.",
+
+	MsgProposalReceived: "✅ Taklifingiz qabul qilindi.\n\nTasdiqlaysizmi?",
+
+	MsgConfirmProposal: "📄 Sizning taklifingiz:\n\n%s\n\nYuborilsinmi?",
+
+	MsgProposalSubmitted: "✅ Taklifingiz muvaffaqiyatli yuborildi!\n\n" +
+		"Ma'muriyat tez orada ko'rib chiqadi.\n\n" +
+		"Taklif hujjat sifatida saqlandi.",
+
+	MsgProposalCancelled: "❌ Taklif bekor qilindi.",
+
 	// Admin messages
 	MsgAdminPanel:      "👨‍💼 Ma'muriyat paneli",
 	MsgUserList:        "👥 Ro'yxatdan o'tgan foydalanuvchilar ro'yxati",
@@ -62,25 +80,43 @@ var uzbek = map[string]string{
 	BtnSharePhone:      "📱 Telefon raqamni yuborish",
 	BtnSubmitComplaint: "✍️ Shikoyat yuborish",
 	BtnMyComplaints:    "📋 Mening shikoyatlarim",
+	BtnSubmitProposal:  "💡 Taklif yuborish",
+	BtnMyProposals:     "📝 Mening takliflarim",
 	BtnSettings:        "⚙️ Sozlamalar",
 	BtnConfirm:         "✅ Tasdiqlash",
 	BtnCancel:          "❌ Bekor qilish",
 	BtnBack:            "◀️ Orqaga",
 
 	// Admin buttons
-	BtnAdminPanel:      "👨‍💼 Ma'muriyat paneli",
-	BtnCreateClass:     "➕ Guruh yaratish",
-	BtnManageClasses:   "📚 Guruhlarni boshqarish",
-	BtnViewUsers:       "👥 Foydalanuvchilar",
-	BtnViewComplaints:  "📋 Shikoyatlar",
-	BtnViewStats:       "📊 Statistika",
-	BtnExport:          "📥 Eksport",
+	BtnAdminPanel:          "👨‍💼 Ma'muriyat paneli",
+	BtnCreateClass:         "➕ Guruh yaratish",
+	BtnManageClasses:       "📚 Guruhlarni boshqarish",
+	BtnViewUsers:           "👥 Foydalanuvchilar",
+	BtnViewComplaints:      "📋 Shikoyatlar",
+	BtnViewProposals:       "💡 Takliflar",
+	BtnViewStats:           "📊 Statistika",
+	BtnExport:              "📥 Eksport",
+	BtnCreateAnnouncement:  "📢 E'lon yaratish",
+	BtnManageAnnouncements: "📰 E'lonlarni boshqarish",
+	BtnViewAnnouncements:   "📰 E'lonlar",
+	BtnDelete:              "🗑 O'chirish",
+
+	// Announcement messages
+	MsgAnnouncementsList:         "📰 E'lonlar ro'yxati",
+	MsgRequestAnnouncementTitle:  "📌 Iltimos, e'lon sarlavhasini kiriting.\n\nSarlavha qisqa va aniq bo'lishi kerak.",
+	MsgRequestAnnouncementText:   "✍️ Iltimos, e'lon matnini kiriting.\n\nMatn kamida 10 ta belgidan iborat bo'lishi kerak.",
+	MsgRequestAnnouncementImage:  "📸 Iltimos, e'lon uchun rasm yuboring.\n\nRasm formatlar: JPG, PNG, HEIC va boshqalar.",
+	MsgAnnouncementCreated:       "✅ E'lon muvaffaqiyatli yaratildi va barcha foydalanuvchilarga yuborildi!",
+	MsgAnnouncementDeleted:       "✅ E'lon muvaffaqiyatli o'chirildi!",
+	MsgNoAnnouncements:           "📭 Hozircha e'lonlar yo'q.",
+	MsgConfirmDeleteAnnouncement: "⚠️ Ushbu e'lonni o'chirmoqchimisiz?\n\nBu amalni bekor qilib bo'lmaydi!",
 
 	// Errors
 	ErrInvalidPhone:      "❌ Noto'g'ri telefon raqam formati!\n\nTelefon raqam +998 bilan boshlanishi va 9 ta raqamdan iborat bo'lishi kerak.\n\nMisol: +998901234567",
 	ErrInvalidName:       "❌ Noto'g'ri ism formati!\n\nIsm faqat harflardan iborat bo'lishi kerak.",
 	ErrInvalidClass:      "❌ Noto'g'ri guruh formati!\n\nGuruh raqami (1-11) va harfi (A-Z) ko'rsatilishi kerak.\n\nMisol: 9A, 11B",
 	ErrInvalidComplaint:  "❌ Shikoyat matni juda qisqa!\n\nKamida 10 ta belgi kiriting.",
+	ErrInvalidProposal:   "❌ Taklif matni juda qisqa!\n\nKamida 10 ta belgi kiriting.",
 	ErrAlreadyRegistered: "❌ Siz allaqachon ro'yxatdan o'tgansiz!",
 	ErrNotRegistered:     "❌ Siz ro'yxatdan o'tmagansiz!\n\nIltimos, avval /start buyrug'ini bosing.",
 	ErrDatabaseError:     "❌ Xatolik yuz berdi. Iltimos, keyinroq urinib ko'ring.",

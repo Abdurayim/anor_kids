@@ -39,6 +39,34 @@ func (r *AdminRepository) Create(phoneNumber, name string) (*models.Admin, error
 	return &admin, nil
 }
 
+// GetByID gets admin by ID
+func (r *AdminRepository) GetByID(id int) (*models.Admin, error) {
+	query := `
+		SELECT id, phone_number, telegram_id, name, added_at
+		FROM admins
+		WHERE id = $1
+	`
+
+	var admin models.Admin
+	err := r.db.QueryRow(query, id).Scan(
+		&admin.ID,
+		&admin.PhoneNumber,
+		&admin.TelegramID,
+		&admin.Name,
+		&admin.AddedAt,
+	)
+
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to get admin: %w", err)
+	}
+
+	return &admin, nil
+}
+
 // GetByPhoneNumber gets admin by phone number (indexed, fast query)
 func (r *AdminRepository) GetByPhoneNumber(phoneNumber string) (*models.Admin, error) {
 	query := `

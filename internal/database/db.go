@@ -58,7 +58,7 @@ func Close() error {
 	return nil
 }
 
-// RunMigrations executes SQL migration files
+// RunMigrations executes SQL migration files with better error handling
 func RunMigrations(migrationPath string) error {
 	if DB == nil {
 		return fmt.Errorf("database not connected")
@@ -67,6 +67,20 @@ func RunMigrations(migrationPath string) error {
 	sqlBytes, err := os.ReadFile(migrationPath)
 	if err != nil {
 		return fmt.Errorf("failed to read migration file: %w", err)
+	}
+
+	// Special handling for migration 003 - check if is_document column exists
+	if migrationPath == "internal/database/migrations/003_add_announcement_is_document.sql" {
+		var count int
+		err := DB.QueryRow("SELECT COUNT(*) FROM pragma_table_info('announcements') WHERE name='is_document'").Scan(&count)
+		if err == nil && count == 0 {
+			// Column doesn't exist, add it
+			_, err = DB.Exec("ALTER TABLE announcements ADD COLUMN is_document BOOLEAN DEFAULT 0")
+			if err != nil {
+				return fmt.Errorf("failed to add is_document column: %w", err)
+			}
+		}
+		// Continue with the rest of the migration (DROP VIEW and CREATE VIEW)
 	}
 
 	_, err = DB.Exec(string(sqlBytes))

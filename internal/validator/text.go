@@ -128,6 +128,78 @@ func ValidateComplaintText(text string) (string, error) {
 	return text, nil
 }
 
+// ValidateProposalText validates proposal text
+func ValidateProposalText(text string) (string, error) {
+	// Trim whitespace
+	text = strings.TrimSpace(text)
+
+	// Check length
+	if utf8.RuneCountInString(text) < 10 {
+		return "", fmt.Errorf("taklif matni juda qisqa (kamida 10 ta belgi) / текст предложения слишком короткий (минимум 10 символов)")
+	}
+
+	if utf8.RuneCountInString(text) > 5000 {
+		return "", fmt.Errorf("taklif matni juda uzun (maksimal 5000 ta belgi) / текст предложения слишком длинный (максимум 5000 символов)")
+	}
+
+	// Sanitize input
+	text = SanitizeInput(text)
+
+	if strings.TrimSpace(text) == "" {
+		return "", fmt.Errorf("taklif matni bo'sh bo'lishi mumkin emas / текст предложения не может быть пустым")
+	}
+
+	return text, nil
+}
+
+// ValidateAnnouncementTitle validates announcement title
+func ValidateAnnouncementTitle(title string) (string, error) {
+	// Trim whitespace
+	title = strings.TrimSpace(title)
+
+	// Check length
+	if utf8.RuneCountInString(title) < 3 {
+		return "", fmt.Errorf("e'lon sarlavhasi juda qisqa (kamida 3 ta belgi) / заголовок объявления слишком короткий (минимум 3 символа)")
+	}
+
+	if utf8.RuneCountInString(title) > 200 {
+		return "", fmt.Errorf("e'lon sarlavhasi juda uzun (maksimal 200 ta belgi) / заголовок объявления слишком длинный (максимум 200 символов)")
+	}
+
+	// Sanitize input
+	title = SanitizeInput(title)
+
+	if strings.TrimSpace(title) == "" {
+		return "", fmt.Errorf("e'lon sarlavhasi bo'sh bo'lishi mumkin emas / заголовок объявления не может быть пустым")
+	}
+
+	return title, nil
+}
+
+// ValidateAnnouncementText validates announcement text
+func ValidateAnnouncementText(text string) (string, error) {
+	// Trim whitespace
+	text = strings.TrimSpace(text)
+
+	// Check length
+	if utf8.RuneCountInString(text) < 10 {
+		return "", fmt.Errorf("e'lon matni juda qisqa (kamida 10 ta belgi) / текст объявления слишком короткий (минимум 10 символов)")
+	}
+
+	if utf8.RuneCountInString(text) > 5000 {
+		return "", fmt.Errorf("e'lon matni juda uzun (maksimal 5000 ta belgi) / текст объявления слишком длинный (максимум 5000 символов)")
+	}
+
+	// Sanitize input
+	text = SanitizeInput(text)
+
+	if strings.TrimSpace(text) == "" {
+		return "", fmt.Errorf("e'lon matni bo'sh bo'lishi mumkin emas / текст объявления не может быть пустым")
+	}
+
+	return text, nil
+}
+
 // RemoveExcessWhitespace removes excess whitespace from text
 func RemoveExcessWhitespace(text string) string {
 	// Replace multiple spaces with single space

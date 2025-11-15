@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"fmt"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"anor-kids/internal/i18n"
 	"anor-kids/internal/models"
@@ -38,7 +40,16 @@ func MakeMainMenuKeyboard(lang i18n.Language) tgbotapi.ReplyKeyboardMarkup {
 			tgbotapi.NewKeyboardButton(i18n.Get(i18n.BtnSubmitComplaint, lang)),
 		),
 		tgbotapi.NewKeyboardButtonRow(
+			tgbotapi.NewKeyboardButton(i18n.Get(i18n.BtnSubmitProposal, lang)),
+		),
+		tgbotapi.NewKeyboardButtonRow(
 			tgbotapi.NewKeyboardButton(i18n.Get(i18n.BtnMyComplaints, lang)),
+			tgbotapi.NewKeyboardButton(i18n.Get(i18n.BtnMyProposals, lang)),
+		),
+		tgbotapi.NewKeyboardButtonRow(
+			tgbotapi.NewKeyboardButton(i18n.Get(i18n.BtnViewAnnouncements, lang)),
+		),
+		tgbotapi.NewKeyboardButtonRow(
 			tgbotapi.NewKeyboardButton(i18n.Get(i18n.BtnSettings, lang)),
 		),
 	)
@@ -51,7 +62,16 @@ func MakeMainMenuKeyboardWithAdmin(lang i18n.Language) tgbotapi.ReplyKeyboardMar
 			tgbotapi.NewKeyboardButton(i18n.Get(i18n.BtnSubmitComplaint, lang)),
 		),
 		tgbotapi.NewKeyboardButtonRow(
+			tgbotapi.NewKeyboardButton(i18n.Get(i18n.BtnSubmitProposal, lang)),
+		),
+		tgbotapi.NewKeyboardButtonRow(
 			tgbotapi.NewKeyboardButton(i18n.Get(i18n.BtnMyComplaints, lang)),
+			tgbotapi.NewKeyboardButton(i18n.Get(i18n.BtnMyProposals, lang)),
+		),
+		tgbotapi.NewKeyboardButtonRow(
+			tgbotapi.NewKeyboardButton(i18n.Get(i18n.BtnViewAnnouncements, lang)),
+		),
+		tgbotapi.NewKeyboardButtonRow(
 			tgbotapi.NewKeyboardButton(i18n.Get(i18n.BtnSettings, lang)),
 		),
 		tgbotapi.NewKeyboardButtonRow(
@@ -151,8 +171,26 @@ func MakeAdminKeyboard(lang i18n.Language) tgbotapi.InlineKeyboardMarkup {
 		),
 		tgbotapi.NewInlineKeyboardRow(
 			tgbotapi.NewInlineKeyboardButtonData(
+				i18n.Get(i18n.BtnViewProposals, lang),
+				"admin_proposals",
+			),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(
 				i18n.Get(i18n.BtnViewStats, lang),
 				"admin_stats",
+			),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(
+				i18n.Get(i18n.BtnCreateAnnouncement, lang),
+				"admin_create_announcement",
+			),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(
+				i18n.Get(i18n.BtnManageAnnouncements, lang),
+				"admin_manage_announcements",
 			),
 		),
 	)
@@ -184,6 +222,119 @@ func MakeClassSelectionKeyboard(classes []*models.Class, lang i18n.Language) tgb
 	}
 
 	_ = lang // Will be used in future for localized buttons
+
+	return tgbotapi.NewInlineKeyboardMarkup(rows...)
+}
+
+// MakeProposalImagePromptKeyboard creates keyboard to ask if user wants to add images for proposal
+func MakeProposalImagePromptKeyboard(lang i18n.Language) tgbotapi.InlineKeyboardMarkup {
+	yesText := "✅ Ha, rasm qo'shaman"
+	noText := "📤 Yo'q, rasmiz davom etish"
+
+	if lang == i18n.LanguageRussian {
+		yesText = "✅ Да, добавить фото"
+		noText = "📤 Нет, продолжить без фото"
+	}
+
+	return tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(
+				yesText,
+				"add_proposal_images",
+			),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(
+				noText,
+				"skip_proposal_images",
+			),
+		),
+	)
+}
+
+// MakeProposalImageCollectionKeyboard creates keyboard for proposal image collection flow
+func MakeProposalImageCollectionKeyboard(lang i18n.Language) tgbotapi.InlineKeyboardMarkup {
+	finishText := "✅ Tugallash"
+
+	if lang == i18n.LanguageRussian {
+		finishText = "✅ Завершить"
+	}
+
+	return tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(
+				finishText,
+				"finish_proposal_images",
+			),
+		),
+	)
+}
+
+// MakeProposalConfirmationKeyboard creates proposal confirmation keyboard
+func MakeProposalConfirmationKeyboard(lang i18n.Language) tgbotapi.InlineKeyboardMarkup {
+	return tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(
+				i18n.Get(i18n.BtnConfirm, lang),
+				"confirm_proposal",
+			),
+			tgbotapi.NewInlineKeyboardButtonData(
+				i18n.Get(i18n.BtnCancel, lang),
+				"cancel_proposal",
+			),
+		),
+	)
+}
+
+// MakeAnnouncementDeleteKeyboard creates keyboard for deleting announcement
+func MakeAnnouncementDeleteKeyboard(announcementID int, lang i18n.Language) tgbotapi.InlineKeyboardMarkup {
+	return tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(
+				i18n.Get(i18n.BtnDelete, lang),
+				fmt.Sprintf("delete_announcement_%d", announcementID),
+			),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(
+				i18n.Get(i18n.BtnBack, lang),
+				"admin_back",
+			),
+		),
+	)
+}
+
+// MakeAnnouncementListKeyboard creates keyboard for announcement pagination (admin view)
+func MakeAnnouncementListKeyboard(currentPage, totalPages int, lang i18n.Language) tgbotapi.InlineKeyboardMarkup {
+	var rows [][]tgbotapi.InlineKeyboardButton
+
+	// Navigation row
+	var navRow []tgbotapi.InlineKeyboardButton
+	if currentPage > 0 {
+		navRow = append(navRow, tgbotapi.NewInlineKeyboardButtonData(
+			"◀️",
+			fmt.Sprintf("announcements_page_%d", currentPage-1),
+		))
+	}
+
+	if currentPage < totalPages-1 {
+		navRow = append(navRow, tgbotapi.NewInlineKeyboardButtonData(
+			"▶️",
+			fmt.Sprintf("announcements_page_%d", currentPage+1),
+		))
+	}
+
+	if len(navRow) > 0 {
+		rows = append(rows, navRow)
+	}
+
+	// Back button
+	rows = append(rows, tgbotapi.NewInlineKeyboardRow(
+		tgbotapi.NewInlineKeyboardButtonData(
+			i18n.Get(i18n.BtnBack, lang),
+			"admin_back",
+		),
+	))
 
 	return tgbotapi.NewInlineKeyboardMarkup(rows...)
 }

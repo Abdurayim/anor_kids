@@ -133,6 +133,49 @@ func HandleAdminComplaintsCallback(botService *services.BotService, callback *tg
 	return botService.TelegramService.SendMessage(chatID, text, nil)
 }
 
+// HandleAdminProposalsCallback handles admin proposals list callback
+func HandleAdminProposalsCallback(botService *services.BotService, callback *tgbotapi.CallbackQuery) error {
+	chatID := callback.Message.Chat.ID
+
+	// Get proposals with user info
+	proposals, err := botService.ProposalService.GetAllProposalsWithUser(10, 0)
+	if err != nil {
+		text := "Xatolik / Ошибка: " + err.Error()
+		return botService.TelegramService.SendMessage(chatID, text, nil)
+	}
+
+	// Count total proposals
+	totalCount, _ := botService.ProposalService.CountProposals()
+
+	// Format proposals list
+	text := fmt.Sprintf("💡 Takliflar / Предложения\n\n")
+	text += fmt.Sprintf("Jami / Всего: %d\n\n", totalCount)
+
+	for i, p := range proposals {
+		statusEmoji := "⏳"
+		statusText := "Kutilmoqda / Ожидание"
+
+		if p.Status == models.ProposalStatusReviewed {
+			statusEmoji = "✅"
+			statusText = "Ko'rib chiqildi / Рассмотрено"
+		}
+
+		text += fmt.Sprintf("%d. %s #%d - %s %s\n", i+1, statusEmoji, p.ID, p.ChildName, p.ChildClass)
+		text += fmt.Sprintf("   📱 %s\n", p.PhoneNumber)
+		preview := utils.TruncateText(p.ProposalText, 60)
+		text += fmt.Sprintf("   💬 %s\n", preview)
+		text += fmt.Sprintf("   📅 %s\n", utils.FormatDateTime(p.CreatedAt))
+		text += fmt.Sprintf("   📊 %s\n\n", statusText)
+	}
+
+	if len(proposals) < totalCount {
+		text += fmt.Sprintf("...va yana %d ta / ...и ещё %d", totalCount-len(proposals), totalCount-len(proposals))
+	}
+
+	_ = botService.TelegramService.AnswerCallbackQuery(callback.ID, "")
+	return botService.TelegramService.SendMessage(chatID, text, nil)
+}
+
 // HandleAdminStatsCallback handles admin statistics callback
 func HandleAdminStatsCallback(botService *services.BotService, callback *tgbotapi.CallbackQuery) error {
 	chatID := callback.Message.Chat.ID

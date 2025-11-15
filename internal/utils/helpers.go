@@ -38,6 +38,21 @@ func GeneratePDFFilename(childName, childClass string) string {
 	return filename
 }
 
+// GenerateProposalPDFFilename generates a filename for proposal PDF document
+// Format: Taklif_ChildName_ClassName_Date.pdf
+func GenerateProposalPDFFilename(childName, childClass string) string {
+	date := time.Now().Format("2006-01-02")
+
+	// Sanitize name
+	safeName := validator.SanitizeFilename(childName)
+	safeName = strings.ReplaceAll(safeName, " ", "_")
+
+	// Create filename
+	filename := fmt.Sprintf("Taklif_%s_%s_sinf_%s.pdf", safeName, childClass, date)
+
+	return filename
+}
+
 // GenerateComplaintCaption generates caption for complaint document
 func GenerateComplaintCaption(childName, childClass, phoneNumber string) string {
 	return fmt.Sprintf(
@@ -101,6 +116,18 @@ func EscapeMarkdown(text string) string {
 		"}", "\\}",
 		".", "\\.",
 		"!", "\\!",
+	)
+
+	return replacer.Replace(text)
+}
+
+// EscapeHTML escapes special HTML characters for Telegram HTML mode
+func EscapeHTML(text string) string {
+	replacer := strings.NewReplacer(
+		"&", "&amp;",
+		"<", "&lt;",
+		">", "&gt;",
+		"\"", "&quot;",
 	)
 
 	return replacer.Replace(text)

@@ -37,6 +37,15 @@ const (
 	MsgComplaintSubmitted     = "complaint_submitted"
 	MsgComplaintCancelled     = "complaint_cancelled"
 
+	// Proposal flow
+	MsgSubmitProposal         = "submit_proposal"
+	MsgMyProposals            = "my_proposals"
+	MsgRequestProposal        = "request_proposal"
+	MsgProposalReceived       = "proposal_received"
+	MsgConfirmProposal        = "confirm_proposal"
+	MsgProposalSubmitted      = "proposal_submitted"
+	MsgProposalCancelled      = "proposal_cancelled"
+
 	// Admin messages
 	MsgAdminPanel             = "admin_panel"
 	MsgUserList               = "user_list"
@@ -50,6 +59,8 @@ const (
 	BtnSharePhone             = "btn_share_phone"
 	BtnSubmitComplaint        = "btn_submit_complaint"
 	BtnMyComplaints           = "btn_my_complaints"
+	BtnSubmitProposal         = "btn_submit_proposal"
+	BtnMyProposals            = "btn_my_proposals"
 	BtnSettings               = "btn_settings"
 	BtnConfirm                = "btn_confirm"
 	BtnCancel                 = "btn_cancel"
@@ -61,14 +72,30 @@ const (
 	BtnManageClasses          = "btn_manage_classes"
 	BtnViewUsers              = "btn_view_users"
 	BtnViewComplaints         = "btn_view_complaints"
+	BtnViewProposals          = "btn_view_proposals"
 	BtnViewStats              = "btn_view_stats"
 	BtnExport                 = "btn_export"
+	BtnCreateAnnouncement     = "btn_create_announcement"
+	BtnManageAnnouncements    = "btn_manage_announcements"
+	BtnViewAnnouncements      = "btn_view_announcements"
+	BtnDelete                 = "btn_delete"
+
+	// Announcement messages
+	MsgAnnouncementsList      = "announcements_list"
+	MsgRequestAnnouncementTitle = "request_announcement_title"
+	MsgRequestAnnouncementText  = "request_announcement_text"
+	MsgRequestAnnouncementImage = "request_announcement_image"
+	MsgAnnouncementCreated    = "announcement_created"
+	MsgAnnouncementDeleted    = "announcement_deleted"
+	MsgNoAnnouncements        = "no_announcements"
+	MsgConfirmDeleteAnnouncement = "confirm_delete_announcement"
 
 	// Errors
 	ErrInvalidPhone           = "err_invalid_phone"
 	ErrInvalidName            = "err_invalid_name"
 	ErrInvalidClass           = "err_invalid_class"
 	ErrInvalidComplaint       = "err_invalid_complaint"
+	ErrInvalidProposal        = "err_invalid_proposal"
 	ErrAlreadyRegistered      = "err_already_registered"
 	ErrNotRegistered          = "err_not_registered"
 	ErrDatabaseError          = "err_database_error"

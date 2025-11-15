@@ -39,15 +39,25 @@ func main() {
 	log.Println("✓ Temporary documents directory created")
 
 	// Run migrations (SQLite version)
-	migrationPath := "internal/database/migrations/001_initial_sqlite.sql"
-	if _, err := os.Stat(migrationPath); err == nil {
-		err = database.RunMigrations(migrationPath)
-		if err != nil {
-			log.Printf("Warning: Migration failed: %v", err)
+	migrations := []string{
+		"internal/database/migrations/001_initial_sqlite.sql",
+		"internal/database/migrations/002_add_proposals_and_announcements.sql",
+		"internal/database/migrations/003_add_announcement_is_document.sql",
+	}
+
+	for _, migrationPath := range migrations {
+		if _, err := os.Stat(migrationPath); err == nil {
+			err = database.RunMigrations(migrationPath)
+			if err != nil {
+				log.Printf("Warning: Migration %s failed: %v", migrationPath, err)
+			} else {
+				log.Printf("✓ Migration %s completed", migrationPath)
+			}
 		} else {
-			log.Println("✓ Database migrations completed")
+			log.Printf("Warning: Migration file not found: %s", migrationPath)
 		}
 	}
+	log.Println("✓ All database migrations completed")
 
 	// Initialize bot service
 	botService, err := services.NewBotService(cfg, database.DB)

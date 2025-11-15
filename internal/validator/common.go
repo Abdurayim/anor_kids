@@ -55,3 +55,47 @@ func SanitizeFilename(filename string) string {
 
 	return strings.TrimSpace(filename)
 }
+
+// ValidateAnnouncementImageType validates image type for announcements
+// Rejects GIF and other non-image formats
+// Supports: HEIC, JPG, JPEG, PNG, WEBP, BMP, TIFF
+func ValidateAnnouncementImageType(mimeType string) error {
+	if mimeType == "" {
+		return nil // Allow empty mime type for backward compatibility
+	}
+
+	mimeType = strings.ToLower(strings.TrimSpace(mimeType))
+
+	// Reject GIF explicitly
+	if strings.Contains(mimeType, "gif") {
+		return fmt.Errorf("GIF formati qo'llab-quvvatlanmaydi / Формат GIF не поддерживается")
+	}
+
+	// List of supported image MIME types
+	supportedTypes := []string{
+		"image/jpeg",
+		"image/jpg",
+		"image/png",
+		"image/heic",
+		"image/heif",
+		"image/webp",
+		"image/bmp",
+		"image/tiff",
+		"image/x-icon",
+	}
+
+	// Check if mime type is in supported list
+	for _, supported := range supportedTypes {
+		if mimeType == supported {
+			return nil
+		}
+	}
+
+	// If starts with "image/" but not in our list, reject
+	if strings.HasPrefix(mimeType, "image/") {
+		return fmt.Errorf("Bu rasm formati qo'llab-quvvatlanmaydi. Faqat JPG, PNG, HEIC formatlarini yuklang / Этот формат изображения не поддерживается. Загрузите только JPG, PNG, HEIC")
+	}
+
+	// Not an image at all
+	return fmt.Errorf("Iltimos, rasm yuboring (JPG, PNG, HEIC). Video yoki boshqa fayllar qabul qilinmaydi / Пожалуйста, отправьте изображение (JPG, PNG, HEIC). Видео или другие файлы не принимаются")
+}

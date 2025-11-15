@@ -3,6 +3,7 @@ package handlers
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"log"
+	"anor-kids/internal/i18n"
 	"anor-kids/internal/services"
 )
 
@@ -43,6 +44,14 @@ func HandleMessage(botService *services.BotService, message *tgbotapi.Message) e
 	// Handle commands first
 	if message.IsCommand() {
 		return HandleCommand(botService, message)
+	}
+
+	// Check for admin panel button press (even if user is not registered)
+	buttonText := message.Text
+	adminBtnUz := i18n.Get(i18n.BtnAdminPanel, i18n.LanguageUzbek)
+	adminBtnRu := i18n.Get(i18n.BtnAdminPanel, i18n.LanguageRussian)
+	if buttonText == adminBtnUz || buttonText == adminBtnRu {
+		return HandleAdminCommand(botService, message)
 	}
 
 	// Check if user is registered
